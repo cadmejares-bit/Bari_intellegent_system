@@ -1,0 +1,164 @@
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+     
+    <div id="sidebar" class="group sidebar fixed top-0 bottom-0 left-0 p-4 w-50 shrink-0 overflow-y-auto shadow-2xl bg-neutral-950 border-r border-white/5 transition-all duration-300 z-50 flex flex-col gap-6">
+        
+        <div class="flex items-center justify-between h-8 px-1">
+            <div class="h-7"> 
+                <img src="../assets/imgs/logo1.png" alt="logo1" class="h-full w-auto object-contain">
+            </div>
+            
+            <button id="btn-toggle" class="text-white/60 hover:text-white hover:scale-110 p-1 rounded-full hover:bg-white/5 transition-all cursor-pointer flex justify-center">
+                <i data-lucide="menu" id="toggle-icon" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <nav class="flex flex-col gap-1.5 text-[14px] font-normal text-white flex-1">
+            
+            <div class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-white/70 hover:text-blue-400 hover:bg-white/5 transition-all">
+                <a href="captain_dashboard.html" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="layout-dashboard" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105"></i>
+                    <span class="sidebar-text font-extralight tracking-wide group-[.w-20]:hidden block">
+                        Dashboard 
+                    </span>
+                </a>
+            </div>
+                
+            <div class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-white/70 hover:text-blue-400 hover:bg-white/5 transition-all">
+                <a href="incident_verification.html" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="shield-check" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105"></i>
+                    <span class="sidebar-text font-extralight tracking-wide group-[.w-20]:hidden block">Verification</span>
+                </a>
+            </div>
+
+            <div class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-white/70 hover:text-blue-400 hover:bg-white/5 transition-all">
+                <a href="reports_view.html" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="file-text" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105"></i>
+                    <span class="sidebar-text font-extralight tracking-wide group-[.w-20]:hidden block">Reports</span>
+                </a>
+            </div>
+
+            <div class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-white/70 hover:text-blue-400 hover:bg-white/5 transition-all">
+                <a href="command_unit.html" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="map-pin" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105"></i>
+                    <span class="sidebar-text font-extralight tracking-wide group-[.w-20]:hidden block">Patrol</span>
+                </a>
+            </div>
+
+            <div class="my-3 px-3 group-[.w-20]:hidden block">
+                <hr class="border-white/5 mb-3">
+                <p class="text-[11px] font-bold text-white/30 uppercase tracking-widest pl-0.5 select-none">Other</p>
+            </div>
+
+            <div class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-white/70 hover:text-blue-400 hover:bg-white/5 transition-all">
+                <a href="#" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="settings-2" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:scale-105"></i>
+                    <span class="sidebar-text font-extralight tracking-wide group-[.w-20]:hidden block">Settings</span>
+                </a>
+            </div>
+
+            <div id="btn-logout" class="group-item flex items-center rounded-xl duration-200 cursor-pointer tracking-wide text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all mt-auto">
+                <a href="#logout" class="flex items-center w-full p-3 gap-3.5">
+                    <i data-lucide="log-out" class="w-4.5 h-4.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"></i>
+                    <span class="sidebar-text font-semibold tracking-wide group-[.w-20]:hidden block">Logout</span>
+                </a>
+            </div>
+            
+        </nav>
+    </div>
+
+    <div id="logoutModal" class=" fixed inset-0 bg-black/70 backdrop-blur-sm z-100 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+        <div id="logoutCard" class="bg-neutral-950 border border-white/10 rounded-2xl p-6 max-w-sm w-full transform scale-95 transition-all duration-300 space-y-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-400"></i>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-bold text-white tracking-wide">Exit Terminal Session?</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        Are you sure you want to log out? Unsaved changes inside your current form inputs will be dropped.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button id="modal-cancel-btn" type="button" class="px-4 py-2 bg-neutral-900 border border-white/5 hover:border-white/10 text-gray-300 text-xs rounded-lg font-medium transition-colors cursor-pointer">
+                    Cancel
+                </button>
+                <button id="modal-confirm-btn" type="button" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-xs rounded-lg font-semibold transition-colors shadow-lg shadow-red-600/10 cursor-pointer">
+                    Confirm Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            const currentPath = window.location.pathname;
+            const pageName = decodeURIComponent(currentPath.split("/").pop());
+            const navLinks = document.querySelectorAll('#sidebar nav a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                const parentDiv = link.closest('.group-item');
+
+                if (!linkHref || linkHref === "#" || linkHref === "#logout" || !parentDiv) return;
+
+                if (pageName === linkHref) {
+                    parentDiv.classList.remove('text-white/70', 'hover:bg-white/5');
+                    parentDiv.classList.add('bg-blue-600/15', 'text-blue-400', 'font-semibold');
+                    
+                    const icon = parentDiv.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('text-white/70');
+                        icon.classList.add('text-blue-400');
+                    }
+                }
+            });
+
+            // --- Logout Modal Interactivity Logic ---
+            const logoutTrigger = document.getElementById('btn-logout');
+            const logoutModal = document.getElementById('logoutModal');
+            const logoutCard = document.getElementById('logoutCard');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+
+            function toggleModal(show) {
+                if (!logoutModal || !logoutCard) return;
+                if (show) {
+                    logoutModal.classList.remove('hidden', 'pointer-events-none');
+                    setTimeout(() => {
+                        logoutModal.classList.remove('opacity-0');
+                        logoutCard.classList.remove('scale-95');
+                        logoutCard.classList.add('scale-100');
+                    }, 20);
+                } else {
+                    logoutCard.classList.remove('scale-100');
+                    logoutCard.classList.add('scale-95');
+                    logoutModal.classList.add('opacity-0');
+                    setTimeout(() => {
+                        logoutModal.classList.add('hidden', 'pointer-events-none');
+                    }, 300);
+                }
+            }
+
+            if (logoutTrigger) {
+                logoutTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleModal(true);
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => toggleModal(false));
+            }
+
+            
+            
+        });
+    </script>
+</body>

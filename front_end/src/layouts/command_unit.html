@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Command Unit | Patrol Scheduler Matrix</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Hardware accelerated fluid layout transition definitions */
+        #sidebar {
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-text {
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        }
+
+        /* Fluid layout wrapper container entry animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
+</head>
+
+<body class="bg-black m-0 p-0 min-h-screen text-white flex antialiased overflow-x-hidden">
+
+    <!-- 1. SIDEBAR INJECTION CONTAINER (Stays static on left boundary) -->
+    <div id="sidebar-container" class="h-full shrink-0 relative z-40"></div>
+
+    <!-- 2. MAIN CONTENT VIEWPORT LAYER -->
+    <main id="main-content" class="flex-1 min-h-screen p-6 transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1) ml-50">
+        <div class="max-w-7xl mx-auto flex flex-col gap-6 animate-fade-in-up">
+            
+            <!-- Context Header Row -->
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 gap-4">
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide text-gray-100">Patrol Assignment</h1>
+                    <p class="text-xs text-gray-500 mt-0.5">Assign your Squad.</p>
+                </div>
+            </header>
+
+            <!-- Configuration and Activity Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Dispatch Setup Panel Card -->
+                <div class="lg:col-span-5 bg-neutral-950 border border-white/5 rounded-xl p-5 hover:border-white/10 transition-all duration-300">
+                    <div class="border-b border-white/5 pb-2 mb-4">
+                        <h2 class="text-sm font-semibold tracking-wide text-gray-200">Dispatch New Patrol Squad</h2>
+                    </div>
+
+                    <form id="patrolForm" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                                Squad Leader / Tanod on Duty <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <!-- Updated selection ring components to matching sky-blue styles -->
+                                <select id="patrol_leader" required 
+                                    class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all appearance-none cursor-pointer">
+                                    <option value="" disabled selected hidden>Select an Officer on duty...</option>
+                                    <option value="Officer Juan Cruz">Officer Juan Cruz</option>
+                                    <option value="Officer Pedro Santos">Officer Pedro Santos</option>
+                                    <option value="Officer Mark Silang">Officer Mark Silang</option>
+                                    <option value="Officer Antonio Luna">Officer Antonio Ping</option>
+                                    <option value="Officer Jose Rizal">Officer Jose Villanueva</option>
+                                    <option value="Officer Andres Bonifacio">Officer Andres Bing</option>
+                                    <option value="Officer Emilio Aguinaldo">Officer Emilio Manito</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                                    Target Sector <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <!-- Updated focus rings over to high-tech sky accents -->
+                                    <select id="patrol_location" required 
+                                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all appearance-none cursor-pointer">
+                                        <option value="purok1">Purok 1</option>
+                                        <option value="purok2">Purok 2</option>
+                                        <option value="purok3">Purok 3</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                                    Shift Assignment <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <!-- Updated focus rings over to high-tech sky accents -->
+                                    <select id="patrol_shift" required 
+                                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all appearance-none cursor-pointer">
+                                        <option value="Morning"> Morning (6AM - 2PM)</option>
+                                        <option value="Afternoon"> Afternoon (2PM - 10PM)</option>
+                                        <option value="Night"> Night (10PM - 6AM)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                                Deployment Date
+                            </label>
+                            <!-- Updated date selection highlight states to sky-blue parameters -->
+                            <input type="date" id="patrol_date" required 
+                                class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all">
+                        </div>
+
+                        <div class="pt-2">
+                            <!-- Shifted primary button styles away from deep emerald over to clean operational blue accents -->
+                            <button type="submit" 
+                                class="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs py-2.5 rounded shadow-lg shadow-blue-950/20 transition-all transform active:scale-[0.98]">
+                                Authorize & Deploy Squad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Real-Time Roster Live Feed Wrapper Column -->
+                <div class="lg:col-span-7 flex flex-col gap-4">
+                    <div class="flex justify-between items-center bg-neutral-950 border border-white/5 p-3 rounded-xl">
+                        <span class="text-xs font-semibold text-gray-300">Active Deployment Registry</span>
+                        <span class="text-[10px] text-gray-500 font-medium tracking-wide">Real-Time Sync Feed</span>
+                    </div>
+
+                    <div id="patrolRosterContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="text-xs text-gray-600 col-span-full text-center py-12">Fetching operational roster profiles...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+   <div id="sidebar-container" class="h-full shrink-0"></div>
+    <script src="../js/sidebar.js"></script>
+    <!-- Business Logic Interface Modules -->
+    <script src="../js/patrol_assign.js"></script>
+</body>
+</html>

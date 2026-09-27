@@ -1,0 +1,92 @@
+
+        /* 1. Global container boundaries */
+        .gridjs, 
+        .gridjs-container {
+            background-color: #000000 !important;
+            color: #e5e7eb !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* 2. Main structural block panels (Top, Middle Wrapper, Bottom) */
+        .gridjs-head,
+        .gridjs-wrapper,
+        .gridjs-footer {
+            background-color: #000000 !important;
+            background: #000000 !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        .gridjs-head {
+            border-bottom: none !important;
+            padding-bottom: 8px !important;
+        }
+        .gridjs-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* 3. The Search Input Box (Strips the white box) */
+        input.gridjs-input {
+            background-color: #000000 !important;
+            background: #000000 !important;
+            color: #f3f4f6 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 0.5rem !important;
+        }
+        input.gridjs-input:focus {
+            border-color: #06b6d4 !important; /* Glows Cyan on click */
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+        }
+
+        /* 4. Table Layout, Header Row Cells, Data Cells */
+        table.gridjs-table {
+            background-color: #000000 !important;
+            background: #000000 !important;
+        }
+        th.gridjs-th {
+            background-color: #111111 !important; /* Slightly distinct dark header line */
+            color: #f3f4f6 !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            text-transform: uppercase !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.05em !important;
+        }
+        td.gridjs-td {
+            background-color: #000000 !important;
+            color: #d1d5db !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
+        tr.gridjs-tr:hover td.gridjs-td {
+            background-color: #0a0a0a !important; /* Smooth dark row hover tint */
+        }
+
+        /* 5. Pagination Controls and Summary Text labels */
+        .gridjs-summary {
+            color: #6b7280 !important; /* Gray out summary text */
+        }
+        button.gridjs- Pilgrim,
+        button.gridjs-button {
+            background-color: #000000 !important;
+            background: #000000 !important;
+            color: #e5e7eb !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.2s ease;
+        }
+        button.gridjs-button:hover:not(:disabled) {
+            background-color: #111111 !important;
+            color: #ffffff !important;
+        }
+        button.gridjs-button:disabled {
+            background-color: #000000 !important;
+            opacity: 0.25 !important;
+            color: #4b5563 !important;
+            cursor: not-allowed !important;
+        }
+        
+        /* Forces active selected page number box style */
+        button.gridjs-currentPage {
+            background-color: #1f2937 !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            font-weight: bold !important;
+        }
+   
