@@ -159,72 +159,39 @@ async function loadPatrolRoster() {
 async function createPatrolAssignment(e) {
     e.preventDefault();
 
-    const payload = getPatrolFormData();
-
-    const errorMessage = validatePatrolFormData(payload);
-
-    if (errorMessage) {
-        showNotification(errorMessage, 'error');
-        return;
-    }
-
-    await submitPatrolAssignment(payload);
-}
-
-
-function getPatrolFormData() {
-    return {
+    // Pull correct raw strings directly out of the dropdown selection matrices
+    const payload = {
         squad_leader: document.getElementById('patrol_leader').value,
         purok_location: document.getElementById('patrol_location').value,
         shift_assignment: document.getElementById('patrol_shift').value,
         deployment_date: document.getElementById('patrol_date').value
     };
-}
 
-
-function validatePatrolFormData(payload) {
+    // Edge check: Prevent submitting if they haven't bypassed the default placeholder option
     if (!payload.squad_leader) {
-        return 'Please select a valid Squad Leader before authorizing deployment.';
+        showNotification('Please select a valid Squad Leader before authorizing deployment.', 'error');
+        return;
     }
 
-    return null;
-}
-
-
-async function submitPatrolAssignment(payload) {
     try {
         const response = await fetch('http://localhost:5000/api/patrols', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
         if (response.ok) {
-            document.getElementById('patrol_leader').selectedIndex = 0;
-
-            loadPatrolRoster();
-
-            showNotification(
-                'Squad structure authorized and successfully deployed to the field.'
-            );
+            // Reset selection values cleanly back to index position zero
+            document.getElementById('patrol_leader').selectedIndex = 0; 
+            
+            loadPatrolRoster(); // Real-time client-side grid sync
+            showNotification('Squad structure authorized and successfully deployed to the field.');
         } else {
-            showNotification(
-                'Deployment dispatch rejected by server authorization logic.',
-                'error'
-            );
+            showNotification('Deployment dispatch rejected by server authorization logic.', 'error');
         }
     } catch (err) {
-        console.error(
-            "Network error on deployment form intercept:",
-            err
-        );
-
-        showNotification(
-            'Network connection error. Server is completely unreachable.',
-            'error'
-        );
+        console.error("Network error on deployment form intercept:", err);
+        showNotification('Network connection error. Server is completely unreachable.', 'error');
     }
 }
 
