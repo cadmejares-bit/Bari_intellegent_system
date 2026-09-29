@@ -22,7 +22,7 @@ exports.getIncidents = async (req, res) => {
             return res.status(200).json([]);
         }
         
-        // 🌟 FIX: Return real object arrays to match your Grid.js 'id' specifications!
+        // Return real object arrays to match your Grid.js 'id' specifications!
         const formattedData = result.rows.map(row => ({
             incident_id: row.incident_id,
             incident_date: row.incident_date,
