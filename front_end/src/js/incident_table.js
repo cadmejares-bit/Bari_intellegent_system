@@ -7,7 +7,7 @@ function formatIncidentData(data) {
         incident_time: item.incident_time,
         purok_location: item.purok_location,
         reporting_tanod: item.reporting_tanod || item.reporter || 'N/A',
-        status: item.status
+        status: item.status || 'Verified'
     }));
 }
 const grid = new gridjs.Grid({
@@ -36,11 +36,10 @@ const grid = new gridjs.Grid({
             }
         },
     ],
-    server: {
-        url: 'http://localhost:5000/api/incidents',
-        // FIX: Convert your server array payload format cleanly into the structure Grid.js expects
-       then: formatIncidentData
-    },
+  server: {
+    url: 'http://localhost:5000/api/incidents',
+    then: formatIncidentData
+},
     search: { selector: (cell) => cell },
     sort: true,
     pagination: { limit: 5 },
