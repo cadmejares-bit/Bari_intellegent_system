@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="rounded-full" rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Bari Incidents change password | Dashboard</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="custom-grid.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    <link rel="stylesheet" href="../output.css">
+</head>
+<body class="bg-[#060608] text-gray-100 min-h-screen flex items-center justify-center p-6">
+
+<button type="button" onclick="openChangePasswordModal()" 
+        class="bg-neutral-900 border border-white/10 hover:border-blue-500/50 text-gray-200 text-xs px-4 py-2 rounded transition-all cursor-pointer">
+    Modify Security Keys (Change Password)
+</button>
+
+<div id="changePasswordModal" class=" fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-all animate-fade-in">
+    <div class="bg-neutral-950 border border-white/10 w-full max-w-sm rounded-xl p-6 shadow-2xl relative flex flex-col gap-4">
+        
+        <div class="space-y-1">
+            <h2 class="text-base font-bold tracking-wide text-gray-100">Update Access Credentials</h2>
+            <p class="text-[11px] text-gray-500">Rotate security parameters to maintain terminal synchronization.</p>
+        </div>
+
+        <div id="modalError" class="hidden w-full bg-red-950/40 text-red-400 border border-red-500/20 text-[11px] p-2.5 rounded text-center font-medium"></div>
+        <div id="modalSuccess" class="hidden w-full bg-emerald-950/40 text-emerald-400 border border-emerald-500/20 text-[11px] p-2.5 rounded text-center font-medium"></div>
+
+        <form id="changePasswordForm" class="flex flex-col gap-3.5">
+            
+            <div class="flex flex-col">
+                <label for="currentPassword" class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 pl-0.5 select-none">
+                    Current Password
+                </label>
+                <div class="relative w-full flex items-center">
+                    <input type="password" id="currentPassword" placeholder="••••••••••••" 
+                           class="w-full bg-black text-gray-200 placeholder-gray-700 border border-white/10 rounded pl-3 pr-10 py-1.5 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all" required>
+                    <button type="button" class="password-visibility-toggle absolute right-0 top-0 bottom-0 px-3 flex items-center text-gray-600 hover:text-sky-400 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="newPassword" class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 pl-0.5 select-none">
+                    New Security Key
+                </label>
+                <div class="relative w-full flex items-center">
+                    <input type="password" id="newPassword" placeholder="••••••••••••" 
+                           class="w-full bg-black text-gray-200 placeholder-gray-700 border border-white/10 rounded pl-3 pr-10 py-1.5 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all" required>
+                    <button type="button" class="password-visibility-toggle absolute right-0 top-0 bottom-0 px-3 flex items-center text-gray-600 hover:text-sky-400 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="confirmPassword" class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 pl-0.5 select-none">
+                    Confirm New Security Key
+                </label>
+                <div class="relative w-full flex items-center">
+                    <input type="password" id="confirmPassword" placeholder="••••••••••••" 
+                           class="w-full bg-black text-gray-200 placeholder-gray-700 border border-white/10 rounded pl-3 pr-10 py-1.5 text-xs focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all" required>
+                    <button type="button" class="password-visibility-toggle absolute right-0 top-0 bottom-0 px-3 flex items-center text-gray-600 hover:text-sky-400 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full">
+                <button type="button" onclick="handleAbortNavigation()" 
+                        class="w-1/2 bg-neutral-900 hover:bg-neutral-800 border border-white/5 text-gray-400 py-2 rounded font-semibold text-xs text-center transition-all transform active:scale-[0.98] cursor-pointer">
+                    Cancel Abort
+                </button>
+                
+                <button type="submit" 
+                        class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white py-2 rounded font-semibold text-xs shadow-[0_0_15px_rgba(59,130,246,0.15)] transition-all transform active:scale-[0.98] cursor-pointer">
+                    Commit Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../js/changepass.js"></script>
+
+
+</body>
+</html>

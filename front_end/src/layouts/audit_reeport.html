@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="rounded-full" rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Command Unit | Audit Log Dispatch</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons inclusion to support back button vector iconography -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+</head>
+<body class="bg-black text-white min-h-screen p-6 font-['Inter'] flex items-center justify-center">
+
+    <div class="w-full max-w-4xl bg-neutral-950 border border-white/5 rounded-xl p-6 shadow-2xl">
+        
+        <!-- Header Component Block containing Integrated Navigation Actions -->
+        <div class="border-b border-white/5 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-gray-100">Quick Incident Report</h1>
+                <p class="text-xs text-gray-500 mt-0.5">Log operational occurrences, classify natures of case, and commit entries directly to the PostgreSQL audit stream.</p>
+            </div>
+            
+            <!-- RETROFITTED LINK PIPELINE GOING BACK TO DASHBOARD PANEL -->
+            <a href="audit_dashboard.html" class="px-3 py-1.5 bg-white/3 hover:bg-white/8 border border-white/10 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition-all flex items-center gap-1.5 self-start sm:self-center cursor-pointer shadow-sm">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Return to Dashboard
+            </a>
+        </div>
+
+        <form id="incidentForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Reporter Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="form_reporter" required placeholder="e.g., Juan Dela Cruz" 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Incident Type <span class="text-red-500">*</span>
+                    </label>
+                    <select id="incident_type" required 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer">
+                        <option value="" disabled selected hidden>-- Select Classification --</option>
+                        <option value="Noise Disturbance">Noise Disturbance</option>
+                        <option value="Theft / Robbery">Theft / Robbery</option>
+                        <option value="Physical Altercation">Physical Altercation</option>
+                        <option value="Traffic / Accident">Traffic / Accident</option>
+                        <option value="Vandalism">Vandalism</option>
+                        <option value="Suspicious Activity">Suspicious Activity</option>
+                        <option value="Medical Emergency">Medical Emergency</option>
+                        <option value="Other">Other / Miscellaneous</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Incident Date <span class="text-red-500">*</span>
+                    </label>
+                    <input type="date" id="date" required 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Time of Incident <span class="text-red-500">*</span>
+                    </label>
+                    <input type="time" id="time" required 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Location (Zone/Purok) <span class="text-red-500">*</span>
+                    </label>
+                    <select id="form_location" required 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer">
+                        <option value="" disabled selected hidden>-- Select Target Purok Sector --</option>
+                        <option value="purok1">Purok 1</option>
+                        <option value="purok2">Purok 2</option>
+                        <option value="purok3">Purok 3</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Log Entry Timestamp (System Generated)
+                    </label>
+                    <input type="datetime-local" id="created_at" readonly 
+                        class="w-full bg-neutral-900 border border-white/5 opacity-60 rounded px-3 py-2 text-gray-400 text-xs focus:outline-none select-none">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Specific Case Description / Reason for Entry <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="reason" required rows="4" placeholder="Provide distinct situational descriptors or actions observed..." 
+                        class="w-full bg-black border border-white/10 rounded px-3 py-2 text-gray-200 text-xs focus:outline-none focus:border-emerald-500 transition-colors resize-none"></textarea>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-white/5">
+                <button type="submit" 
+                    class="w-full md:w-auto px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded shadow-lg shadow-emerald-950/20 transition-all transform active:scale-[0.98] cursor-pointer">
+                    Commit & Submit Report
+                </button>
+            </div>
+        </form>
+    </div>
+
+<script>
+/**
+ * Synchronous UI Utilities & Form Submissions Engine
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) { lucide.createIcons(); }
+    refreshAuditTimestamp();
+    document.getElementById('incidentForm').addEventListener('submit', dispatchIncidentReport);
+});
+
+/**
+ * Automates internal audit timestamp clocks
+ */
+function refreshAuditTimestamp() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    const timestampField = document.getElementById('created_at');
+    if (timestampField) {
+        timestampField.value = now.toISOString().slice(0, 16);
+    }
+}
+
+/**
+ * Custom Minimal Toast Notification Interface (No Emojis)
+ */
+function showNotification(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = "fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none";
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    let themeConfig = "bg-neutral-950 border-emerald-500/20 text-emerald-400";
+    
+    if (type === 'error') {
+        themeConfig = "bg-neutral-950 border-red-500/20 text-red-400";
+    }
+
+    toast.className = `flex items-center gap-3 border ${themeConfig} p-4 rounded-xl shadow-2xl backdrop-blur-md translate-x-12 opacity-0 transition-all duration-300 ease-out pointer-events-auto`;
+    toast.innerHTML = `
+        <p class="text-xs font-medium text-gray-200 flex-1">${message}</p>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 10);
+    setTimeout(() => {
+        toast.classList.add('translate-x-12', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
+/**
+ * Executes async transmission sequences out to backend API routing channels
+ */
+async function dispatchIncidentReport(e) {
+    e.preventDefault(); 
+
+    // Status mapping defaults automatically to 'Pending' internally to protect database integrity
+    const payload = {
+        reporter: document.getElementById('form_reporter').value.trim(),
+        incident_type: document.getElementById('incident_type').value,
+        incident_date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        location: document.getElementById('form_location').value, 
+        created_at: document.getElementById('created_at').value,
+        reason: document.getElementById('reason').value.trim(),
+        status: 'Pending' 
+    };
+
+    try {
+        const response = await fetch('http://localhost:5000/api/incidents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            showNotification('Report committed safely to PostgreSQL audit logs.', 'success');
+            document.getElementById('incidentForm').reset();
+            refreshAuditTimestamp(); 
+        } else {
+            const errorText = await response.text();
+            showNotification(`Server Rejected Transmission: ${errorText}`, 'error');
+        }
+    } catch (err) {
+        console.error('Network Transaction Crash:', err);
+        showNotification('Network connectivity to backend database api failed.', 'error');
+    }
+}
+</script>
+    
+</body>
+</html>

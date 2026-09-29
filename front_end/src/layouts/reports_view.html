@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Command Unit | Incident Log Records</title>
+        <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+        <link rel="stylesheet" href="../output.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    </style>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Smooth custom scrollbars */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; transition: background 0.2s ease; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        /* Smooth slide-up fade animation for initial load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen p-6 flex flex-col items-center justify-center ml-50">
+
+    <div class="w-full max-w-5xl bg-black border border-white/5 rounded-xl p-6 shadow-2xl space-y-6">
+        
+        <div class="border-b border-white/5 pb-4">
+            <h1 class="text-lg font-bold tracking-wide text-gray-100">Committed Audit Stream Feed</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Direct link to PostgreSQL core logbooks. Select any operational log entry sequence card below to inspect full case details.</p>
+        </div>
+
+        <div id="incidentLogStream" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto pr-1 custom-scrollbar">
+            <div class="col-span-full text-xs text-gray-500 text-center py-12">
+                Connecting to PostgreSQL audit log database stream...
+            </div>
+        </div>
+
+    </div>
+
+    <div id="detailModal" class=" fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-neutral-950 border border-white/10 rounded-xl w-full max-w-md p-6 shadow-2xl space-y-5 transform scale-95 transition-transform duration-200" id="modalCard">
+            
+            <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                <div>
+                    <h2 id="modal_type" class="text-sm font-bold text-gray-100 tracking-wide">Incident Classification File</h2>
+                    <p class="text-[10px] text-gray-500 mt-0.5">System Reference ID: <span id="modal_id" class="font-mono text-gray-300 font-semibold">---</span></p>
+                </div>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-white text-xs cursor-pointer focus:outline-none">&times; Close View</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-0.5">Reporter (Tanod)</p>
+                    <p id="modal_reporter" class="text-gray-200 font-semibold">---</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-0.5">Operational Status</p>
+                    <span id="modal_status" class="inline-block px-2 py-0.5 rounded text-[9px] font-bold mt-0.5 border">---</span>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-0.5">Incident Timeline</p>
+                    <p id="modal_timeline" class="text-gray-300">---</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-0.5">Target Location Zone</p>
+                    <p id="modal_location" class="text-gray-300 uppercase font-mono">---</p>
+                </div>
+                <div class="col-span-2 border-t border-white/5 pt-3">
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-bold mb-1.5">Comprehensive Narrative / Evidence Descriptors</p>
+                    <div id="modal_reason" class="bg-black border border-white/5 rounded p-3 text-gray-300 text-xs leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto font-light custom-scrollbar">
+                        ---
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-white/5 text-gray-300 hover:text-white font-medium text-xs rounded transition-colors cursor-pointer">
+                    Dismiss Viewport
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+let localIncidentStore = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadStreamFeed();
+});
+
+async function loadStreamFeed() {
+    const streamContainer = document.getElementById('incidentLogStream');
+    try {
+        const response = await fetch('http://localhost:5000/api/incidents');
+        if (!response.ok) throw new Error('Data transmission extraction pipeline handshake failed.');
+        
+        localIncidentStore = await response.json();
+        renderStreamCards(localIncidentStore);
+    } catch (err) {
+        console.error("Stream Sync Failure:", err);
+        streamContainer.innerHTML = `
+            <div class="col-span-full text-xs text-red-400 border border-red-500/10 p-4 rounded bg-black text-center font-medium">
+                Database synchronization offline. Verify your local backend node server is running.
+            </div>`;
+    }
+}
+
+function renderStreamCards(items) {
+    const streamContainer = document.getElementById('incidentLogStream');
+    if (!items || items.length === 0) {
+        streamContainer.innerHTML = `<div class="col-span-full text-xs text-gray-600 text-center py-12">No committed incidents found inside your PostgreSQL log structure.</div>`;
+        return;
+    }
+
+    streamContainer.innerHTML = items.map(item => {
+        let statusTag = "text-yellow-400 bg-yellow-400/10 border-yellow-500/10";
+        if (item.status === 'Verified') statusTag = "text-blue-400 bg-blue-400/10 border-blue-500/10";
+        if (item.status === 'Resolved') statusTag = "text-emerald-400 bg-emerald-400/10 border-emerald-500/10";
+
+        // Fallback for null or missing text blocks
+        const reasonText = item.complainant_reason || "No description provided.";
+        const displayTitle = reasonText.length > 50 ? reasonText.substring(0, 50) + '...' : reasonText;
+        const cleanDate = item.incident_date ? new Date(item.incident_date).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'}) : '---';
+
+        return `
+            <div onclick="openFullDetail(${item.incident_id})" 
+                class="bg-black hover:bg-neutral-900 border border-white/5 hover:border-white/10 rounded-lg p-3.5 transition-all duration-150 cursor-pointer flex flex-col justify-between gap-3 group transform active:scale-[0.99]">
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <h3 class="text-xs font-semibold text-gray-200 group-hover:text-emerald-400 transition-colors">
+                            ${displayTitle}
+                        </h3>
+                        <p class="text-[10px] text-gray-500 mt-0.5">By: <span class="text-gray-400 font-medium">${item.reporting_tanod || 'Unknown'}</span></p>
+                    </div>
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded border whitespace-nowrap uppercase tracking-wider ${statusTag}">
+                        ${item.status || 'Pending'}
+                    </span>
+                </div>
+                <div class="flex items-center justify-between border-t border-white/[0.03] pt-2 text-[10px] text-gray-500 font-mono">
+                    <span class="uppercase font-semibold text-gray-400">${item.purok_location || 'N/A'}</span>
+                    <span>${cleanDate} @ ${item.incident_time || '--:--'}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openFullDetail(id) {
+    const dataMatch = localIncidentStore.find(x => x.incident_id === id);
+    if (!dataMatch) return;
+
+    document.getElementById('modal_id').innerText = dataMatch.incident_id || '---';
+    
+    const textSnippet = dataMatch.complainant_reason || '';
+    document.getElementById('modal_type').innerText = textSnippet.length > 25 ? textSnippet.substring(0,25) + '...' : (textSnippet || 'Incident File');
+    
+    document.getElementById('modal_reporter').innerText = dataMatch.reporting_tanod || 'Unknown';
+    document.getElementById('modal_location').innerText = dataMatch.purok_location || 'N/A';
+    document.getElementById('modal_reason').innerText = dataMatch.complainant_reason || 'No comprehensive narrative recorded.';
+    
+    const friendlyDate = dataMatch.incident_date ? new Date(dataMatch.incident_date).toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) : '---';
+    document.getElementById('modal_timeline').innerText = `${friendlyDate} at ${dataMatch.incident_time || '--:--'}`;
+
+    const badge = document.getElementById('modal_status');
+    badge.innerText = dataMatch.status || 'Pending';
+    badge.className = "inline-block px-2 py-0.5 rounded text-[9px] font-bold mt-0.5 border ";
+    if (dataMatch.status === 'Verified') badge.classList.add('text-blue-400','bg-blue-400/10','border-blue-500/20');
+    else if (dataMatch.status === 'Resolved') badge.classList.add('text-emerald-400','bg-emerald-400/10','border-emerald-500/20');
+    else badge.classList.add('text-yellow-400','bg-yellow-400/10','border-yellow-500/20');
+
+    const overlay = document.getElementById('detailModal');
+    const card = document.getElementById('modalCard');
+    overlay.classList.remove('hidden');
+    setTimeout(() => card.classList.remove('scale-95'), 10);
+}
+
+function closeModal() {
+    const overlay = document.getElementById('detailModal');
+    const card = document.getElementById('modalCard');
+    card.classList.add('scale-95');
+    setTimeout(() => overlay.classList.add('hidden'), 150);
+}
+</script>
+<div id="sidebar-container" class="h-full shrink-0"></div>
+<script src="../js/sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center | Sign In</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-black text-white flex h-screen w-screen overflow-hidden font-['Inter'] antialiased select-none">
+
+    <div class="bg-neutral-950 border-r border-white/5 p-8 w-1/2 h-full shrink-0 flex flex-col justify-between items-center box-border overflow-hidden">
+
+        <div class="w-full flex justify-between items-center shrink-0"> 
+            <div class="h-7"> 
+                <img src="../assets/imgs/logo1.png" alt="logo1" class="h-full w-auto object-contain">
+            </div>
+            
+            <div class="text-xs tracking-wide text-gray-500 hover:text-sky-400 transition-colors">
+               <a href="index.html" class="hover:underline">Back to home</a>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center gap-8 my-auto max-h-full min-h-0 justify-center w-full">
+            <img src="../assets/imgs/logo.png" alt="logo" class="w-md h-auto max-w-full max-h-[55vh] opacity-90 object-contain block shrink transition-all">
+            <div class="w-full flex justify-center max-w-sm shrink-0">
+                <p class="text-center text-xs text-gray-500 leading-relaxed tracking-wide font-light">
+                    At IncidentLog, we believe that tracking is not just about raw data collection, but about safeguarding operational integrity and establishing safer neighborhoods.
+                </p>
+            </div>
+        </div>
+
+        <div class="h-7 select-none invisible shrink-0"></div>
+    </div>
+
+    <div class="w-1/2 h-full flex flex-col items-center justify-center p-8 box-border bg-black overflow-hidden">
+        <div class="w-full max-w-xs flex flex-col gap-6 my-auto">
+
+            <div id="errorMessage" class="hidden w-full bg-neutral-950 text-red-400 border border-red-500/10 text-xs p-3.5 rounded-lg text-center font-medium shadow-xl">
+                Invalid credentials provided. Secure sequence rejected.
+            </div>
+                
+            <div class="space-y-1">
+                <h1 class="text-lg font-bold tracking-wide text-gray-100">Sign In</h1>
+                <p class="text-xs text-gray-500">Authenticate session keys to open secure system logs.</p>
+            </div>
+            
+            <form id="loginForm" class="w-full flex flex-col gap-4">
+            
+                <div class="w-full flex flex-col">
+                    <label for="email" class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 pl-0.5 select-none">
+                        Username / Identifier
+                    </label>
+                    <input type="email" 
+                           id="email"
+                           placeholder="name@gmail.com" 
+                           class="w-full bg-black text-gray-200 placeholder-gray-600 border border-white/10 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all"
+                           required>
+                </div>
+                    
+                <div class="w-full flex flex-col">
+                    <label for="password" class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5 pl-0.5 select-none">
+                        Password
+                    </label>
+                    <div class="relative w-full flex items-center">
+                        <input type="password" 
+                               id="password"
+                               placeholder="••••••••••••" 
+                               class="w-full bg-black text-gray-200 placeholder-gray-600 border border-white/10 rounded pl-3 pr-10 py-1.5 text-xs focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all"
+                               required>
+                        
+                        <button type="button" id="passwordToggle" class="absolute right-0 top-0 bottom-0 px-3 flex items-center text-gray-500 hover:text-sky-400 transition-colors cursor-pointer focus:outline-none">
+                            <svg id="eyeIcon" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+              
+                <button type="submit" 
+                        class="w-full mt-2 bg-blue-600/90 text-white py-1.5 rounded font-semibold text-xs hover:bg-blue-500 border border-sky-400/20 shadow-[0_0_15px_rgba(59,130,246,0.1)] hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all transform active:scale-[0.98] cursor-pointer">
+                   Log In
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="rounded-full" rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Bari Incidents Dashboard | Dashboard</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* COMPLETE GRID.JS DARK CUSTOMIZATION OVERRIDES */
+        .gridjs-container { 
+            color: #d1d5db !important; 
+            padding: 0 !important; 
+            background-color: transparent !important; 
+        }
+        .gridjs-wrapper { 
+            background-color: #000000 !important; 
+            border: 1px solid rgba(255, 255, 255, 0.05) !important; 
+            border-radius: 12px !important; 
+            box-shadow: none !important;
+        }
+        .gridjs-table { 
+            background-color: #000000 !important; 
+            width: 100% !important;
+        }
+        .gridjs-th { 
+            background-color: rgba(255, 255, 255, 0.02) !important; 
+            color: #9ca3af !important; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; 
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding: 14px 16px !important; 
+            font-size: 11px !important; 
+            text-transform: uppercase !important; 
+            letter-spacing: 0.05em !important; 
+            font-weight: 600 !important; 
+        }
+        .gridjs-td { 
+            background-color: #000000 !important; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important; 
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding: 14px 16px !important; 
+            color: #e5e7eb !important; 
+            font-size: 13px !important; 
+        }
+        .gridjs-tr:hover .gridjs-td { 
+            background-color: rgba(255, 255, 255, 0.02) !important; 
+        }
+        .gridjs-footer { 
+            background-color: #000000 !important; 
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important; 
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding: 14px 0 !important; 
+            box-shadow: none !important;
+        }
+        .gridjs-search {
+            float: left !important;
+            padding-bottom: 12px !important;
+        }
+        .gridjs-search-input { 
+            background-color: #0a0a0c !important; 
+            border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+            color: #ffffff !important; 
+            border-radius: 8px !important; 
+            font-size: 12px !important; 
+            padding: 8px 14px !important; 
+            width: 240px !important;
+        }
+        .gridjs-search-input:focus { 
+            border-color: rgba(255, 255, 255, 0.25) !important; 
+            outline: none !important; 
+            box-shadow: none !important; 
+        }
+        .gridjs-pagination {
+            color: #9ca3af !important;
+        }
+        .gridjs-pagination .gridjs-pages button { 
+            background-color: rgba(255, 255, 255, 0.03) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.05) !important; 
+            color: #9ca3af !important; 
+            border-radius: 6px !important; 
+            margin: 0 2px !important; 
+            padding: 5px 12px !important; 
+            font-size: 11px !important; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .gridjs-pagination .gridjs-pages button:hover:not(:disabled) { 
+            background-color: rgba(255, 255, 255, 0.08) !important; 
+            color: #ffffff !important; 
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+        .gridjs-pagination .gridjs-pages button:disabled {
+            opacity: 0.3 !important;
+            cursor: not-allowed !important;
+        }
+        .gridjs-pagination .gridjs-pages button.gridjs-currentPage { 
+            background-color: rgba(255, 255, 255, 0.12) !important; 
+            color: #ffffff !important; 
+            border-color: rgba(255, 255, 255, 0.2) !important; 
+            font-weight: 600 !important; 
+        }
+        .gridjs-loading-bar {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+    </style>
+</head>
+
+<body class="bg-[#060608] text-gray-100 min-h-screen flex">
+
+    <div class="flex-1 flex flex-col min-w-0">
+        
+        <header class="p-6 border-b border-white/5 bg-[#08080a] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shrink-0">
+            <div>
+                <h1 class="text-base font-bold tracking-wide text-white">Audit Dashboard</h1>
+                <p class="text-xs text-gray-400 mt-0.5">Real-time command interface verifying active field logs and deployment pipelines.</p>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center">
+                <a href="audit_reeport.html" class="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition-all flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Incident Report
+                </a>
+                
+                <button onclick="exportIncidentLogsCSV()" class="px-3 py-1.5 bg-emerald-600/10 hover:bg-emerald-600 border border-emerald-500/20 text-emerald-400 hover:text-white rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Export Data Logs
+                </button>
+               
+            <a href="changepass.html" class="px-3 py-1.5 bg-slate-600/10 hover:bg-slate-700 border border-slate-500/20 text-slate-200 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+                <i data-lucide="key" class="w-3.5 h-3.5"></i> Change Password
+            </a>
+       
+
+                <a href="index.html" class="px-3 py-1.5 bg-red-500/10 hover:bg-red-600 border border-red-500/20 text-red-400 hover:text-white rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer shadow-sm ml-2">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 space-y-6 overflow-y-auto">
+            
+            <div class="flex flex-nowrap items-stretch gap-4 overflow-x-auto pb-1 scrollbar-none">
+                <div class="bg-[#0d0d11] border border-white/5 rounded-xl p-5 flex items-center justify-between shadow-sm min-w-55 flex-1">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider font-bold text-gray-400">Total Registered Cases</p>
+                        <h3 id="stat_total" class="text-2xl font-bold text-white mt-1">--</h3>
+                    </div>
+                    <div class="p-2 bg-white/5 rounded-lg border border-white/5 text-gray-400 shrink-0 ml-4">
+                        <i data-lucide="database" class="w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <div class="bg-[#0d0d11] border border-white/5 rounded-xl p-5 flex items-center justify-between shadow-sm min-w-55 flex-1">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider font-bold text-yellow-500">Awaiting Validation</p>
+                        <h3 id="stat_pending" class="text-2xl font-bold text-yellow-500 mt-1">--</h3>
+                    </div>
+                    <div class="p-2 bg-yellow-500/10 rounded-lg border border-yellow-500/10 text-yellow-500 shrink-0 ml-4">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                    </div>
+                </div>
+
+                <div class="bg-[#0d0d11] border border-red-500/10 rounded-xl p-5 flex items-center justify-between shadow-sm min-w-55 flex-1">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider font-bold text-red-400">Rejected Transmissions</p>
+                        <h3 id="stat_rejected" class="text-2xl font-bold text-red-400 mt-1">--</h3>
+                    </div>
+                    <div class="p-2 bg-red-500/10 rounded-lg border border-red-500/10 text-red-400 shrink-0 ml-4">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black border border-white/10 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-sm font-medium text-white tracking-wide mb-4">Barangay Incident Log Directory</h2>
+                <div id="automated-table-wrapper"></div>
+            </div>
+
+            <div class="bg-black border border-red-500/10 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-sm font-medium text-red-400 tracking-wide">System Deflection Sandbox (Rejected Logs)</h2>
+                        <p class="text-[11px] text-gray-500 mt-0.5">Payload profiles containing missing clearance parameters, broken validation rules, or execution failure protocols.</p>
+                    </div>
+                    <span class="px-2 py-0.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded text-[10px] font-bold uppercase tracking-wider">
+                        Intercept Logs
+                    </span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-white/1">
+                                <th class="p-3 text-[11px] uppercase tracking-wider font-bold text-gray-400">Timestamp</th>
+                                <th class="p-3 text-[11px] uppercase tracking-wider font-bold text-gray-400">Reporter</th>
+                                <th class="p-3 text-[11px] uppercase tracking-wider font-bold text-gray-400">Classification</th>
+                                <th class="p-3 text-[11px] uppercase tracking-wider font-bold text-gray-400">Deflection Code / Root Error</th>
+                                <th class="p-3 text-[11px] uppercase tracking-wider font-bold text-gray-400 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rejected-logs-stream" class="divide-y divide-white/5 text-xs text-gray-300">
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-gray-500 tracking-wide">
+                                    No rejected entries captured in active session stream.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
+            fetchDashboardMetrics();
+        });
+
+        /**
+         * Pulls operational rows from PostgreSQL endpoint, updates indicators and loads rejected logs
+         */
+        async function fetchDashboardMetrics() {
+            try {
+                const response = await fetch('http://localhost:5000/api/incidents');
+                if (!response.ok) throw new Error('Data stream fetch failed.');
+                
+                const incidents = await response.json();
+                
+                // Aggregate counts based on incident row states
+                const total = incidents.length;
+                const pending = incidents.filter(i => i.status === 'Pending').length;
+                
+                // Extract records intentionally classified as Rejected, Canceled, Denied, or Failed
+                const rejectedIncidents = incidents.filter(i => i.status === 'Rejected' || i.status === 'Denied' || i.status === 'Failed');
+                const rejectedCount = rejectedIncidents.length;
+
+                // FIXED: Bind elements cleanly to metric IDs without dropping values due to mismatched DOM lookups
+                if (document.getElementById('stat_total')) document.getElementById('stat_total').innerText = total;
+                if (document.getElementById('stat_pending')) document.getElementById('stat_pending').innerText = pending;
+                if (document.getElementById('stat_rejected')) document.getElementById('stat_rejected').innerText = rejectedCount;
+
+                // Populate the Sandbox target template block natively
+                renderRejectedSandbox(rejectedIncidents);
+
+            } catch (error) {
+                console.error('Operational Metric Sync Failure:', error);
+                
+                // Fallback simulation layout if backend environment fails
+                if (document.getElementById('stat_total')) document.getElementById('stat_total').innerText = "0";
+                if (document.getElementById('stat_pending')) document.getElementById('stat_pending').innerText = "0";
+                if (document.getElementById('stat_rejected')) document.getElementById('stat_rejected').innerText = "1";
+
+                renderRejectedSandbox([
+                    {
+                        created_at: new Date().toISOString(),
+                        reporter: "Sys_Admin_Pipeline",
+                        incident_type: "Database Intercept",
+                        reason: "ERR_CONNECTION_REFUSED: PostgreSQL engine rejected active routing layer connections."
+                    }
+                ]);
+            }
+        }
+
+        /**
+         * Generates and paints the custom structural row blocks inside the Rejected interface segment
+         */
+        function renderRejectedSandbox(rejectedItems) {
+            const container = document.getElementById('rejected-logs-stream');
+            if (!container) return;
+
+            if (rejectedItems.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-gray-500 tracking-wide">
+                            No rejected entries captured in active session stream.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            container.innerHTML = rejectedItems.map(item => {
+                const formattedDate = item.created_at ? item.created_at.replace('T', ' ').slice(0, 16) : 'N/A';
+                return `
+                    <tr class="hover:bg-red-500/[0.02] transition-colors">
+                        <td class="p-3 font-mono text-[11px] text-gray-400">${formattedDate}</td>
+                        <td class="p-3 font-medium text-white">${item.reporter || 'Anonymous'}</td>
+                        <td class="p-3 text-gray-400">${item.incident_type || 'Unclassified'}</td>
+                        <td class="p-3 text-red-400 font-mono text-[11px] max-w-md truncate" title="${item.reason || ''}">
+                            ${item.reason || 'Missing authentication verification or invalid schema fields.'}
+                        </td>
+                        <td class="p-3 text-right">
+                            <button onclick="alert('Payload Log Details:\\n\\n${(item.reason || '').replace(/'/g, "\\'")}')" class="px-2 py-1 bg-white/5 hover:bg-white/10 rounded text-[10px] text-gray-300 transition-colors cursor-pointer">
+                                Inspect Payload
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Dynamic Row Generator and Exporter Engine for CSV formats
+         */
+        async function exportIncidentLogsCSV() {
+            try {
+                const response = await fetch('http://localhost:5000/api/incidents');
+                if (!response.ok) throw new Error('Failed to capture active records for transmission.');
+                
+                const incidents = await response.json();
+                if (incidents.length === 0) {
+                    alert('The PostgreSQL database is currently empty. No logs available to export.');
+                    return;
+                }
+
+                const headers = ['ID', 'Reporter', 'Incident Type', 'Incident Date', 'Time', 'Location', 'Log Entry Date', 'Description', 'Status'];
+                const csvRows = [];
+                csvRows.push(headers.join(','));
+
+                incidents.forEach(item => {
+                    const values = [
+                        item.id || '',
+                        `"${(item.reporter || 'Anonymous').replace(/"/g, '""')}"`,
+                        `"${(item.incident_type || '').replace(/"/g, '""')}"`,
+                        item.incident_date || '',
+                        item.time || '',
+                        `"${(item.location || '').replace(/"/g, '""')}"`,
+                        item.created_at || '',
+                        `"${(item.reason || '').replace(/"/g, '""')}"`,
+                        item.status || 'Pending'
+                    ];
+                    csvRows.push(values.join(','));
+                });
+
+                const csvString = csvRows.join('\n');
+                const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.href = url;
+                downloadAnchor.setAttribute('download', `barangay_incident_logs_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                document.body.removeChild(downloadAnchor);
+                
+            } catch (error) {
+                console.error('Export Routine Intercept Error:', error);
+                alert('Database synchronization crashed during active stream download parameters.');
+            }
+        }
+    </script>
+    <script src="../js/incident_table.js"></script>
+    <script src="../js/changepass.js"></script>
+
+    
+</body>
+</html>

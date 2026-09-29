@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Incident Verification Queue | Control Panel</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Hardware accelerated layout transition parameters */
+        #sidebar {
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-text {
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        }
+
+        /* Smooth fade up sequence for dynamic elements */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
+</head>
+
+<body class="bg-black m-0 p-0 min-h-screen text-white flex antialiased overflow-x-hidden">
+
+    <!-- 1. SIDEBAR INJECTION CONTAINER -->
+    <div id="sidebar-container" class="h-full shrink-0 relative z-40"></div>
+
+    <!-- 2. MAIN CONTENT WRAPPER -->
+    <main id="main-content" class="flex-1 min-h-screen p-6 transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1) ml-50">
+        <div class="max-w-6xl mx-auto flex flex-col gap-6 animate-fade-in-up">
+            
+            <!-- Header Frame Section -->
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-4 gap-4">
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide text-gray-100">Incident Verification Queue</h1>
+                    <p class="text-xs text-gray-500 mt-0.5">Review citizen submittals, cross-verify logs, and transition case status items live to PostgreSQL.</p>
+                </div>
+                
+                <div class="flex gap-3 text-[11px] font-semibold tracking-wider uppercase">
+                    <div class="bg-neutral-950 border border-white/5 rounded-lg px-3 py-2 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                        <span class="text-gray-400">Pending Review: <span id="metric-pending" class="text-amber-400 font-bold ml-1">0</span></span>
+                    </div>
+                    <div class="bg-neutral-950 border border-white/5 rounded-lg px-3 py-2 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span class="text-gray-400">Verified Today: <span id="metric-resolved" class="text-emerald-400 font-bold ml-1">0</span></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Interactive Search Filter Controls Toolbar -->
+            <div class="flex justify-between items-center bg-neutral-950/60 border border-white/5 p-3 rounded-xl">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-gray-400 font-medium">Filter Queue:</span>
+                    <div class="relative">
+                        <select id="queueLocationFilter" class="appearance-none bg-neutral-900 border border-white/10 text-xs text-gray-300 px-3 py-1.5 pr-8 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/20 transition-all cursor-pointer">
+                            <option value="all">All Purok Sectors</option>
+                            <option value="purok1">Purok 1</option>
+                            <option value="purok2">Purok 2</option>
+                            <option value="purok3">Purok 3</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-600 font-medium tracking-wide">Auto-Refreshing Active Feed</p>
+            </div>
+
+            <!-- Content Stream Matrix Target Grid -->
+            <div id="verificationContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <p class="text-xs text-gray-600 col-span-full text-center py-12">Querying outstanding audit entries...</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Layout Interface Dynamic Mechanics Script Handler Block -->
+    
+
+    <!-- Project Pipeline Assets -->
+    <script src="../js/verification.js"></script>
+ <div id="sidebar-container" class="h-full shrink-0"></div>
+    <script src="../js/sidebar.js"></script>
+</body>
+</html>
