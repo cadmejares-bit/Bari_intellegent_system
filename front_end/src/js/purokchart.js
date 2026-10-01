@@ -10,7 +10,7 @@ async function loadPurokRiskChart() {
     const selectedRange = filterDropdown ? filterDropdown.value : 'week';
 
     try {
-        // 🌟 CACHE-BUSTER FIX: Appended unique timestamp parameter forcing browser to read live DB data
+        //  CACHE-BUSTER FIX: Appended unique timestamp parameter forcing browser to read live DB data
         const cacheBuster = new Date().getTime();
         const response = await fetch(`http://localhost:5000/api/purok-stats?range=${selectedRange}&nocache=${cacheBuster}`);
         if (!response.ok) throw new Error("Failed to load chart backend array");
