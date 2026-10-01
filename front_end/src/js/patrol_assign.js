@@ -219,7 +219,7 @@ async function submitPatrolAssignment(payload) {
             loadPatrolRoster();
 
             showNotification(
-                'Squad structure authorized and successfully deployed to the field.'
+                'Patrol assignment successfully submitted'
             );
         } else {
             showNotification(
@@ -234,7 +234,7 @@ async function submitPatrolAssignment(payload) {
         );
 
         showNotification(
-            'Network connection error. Server is completely unreachable.',
+            'Unable to submit patrol assignment',
             'error'
         );
     }
